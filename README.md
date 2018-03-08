@@ -1,7 +1,8 @@
 # yata
-Yet Another To-do App (yata) is a simple, git powered, encrypted, note-taking and task management app
 ---
+Yet Another To-do App (yata) is a simple, git powered, encrypted, note-taking and task management app
 
+---
 Currently in design - haven't started it yet.
 
 Why another to-do/note app? None of them do what I want. Here are the features we are looking for:
