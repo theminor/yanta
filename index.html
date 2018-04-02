@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>yata</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="manifest" href="manifest.json">
+	<link rel="icon" href="icons/yata-64.png">
+	<link rel="stylesheet" href="yanta.css">
+</head>
+<body>
+
+<div id="editor">
+This is *markdown* and it **works** just fine.
+
+# Heading 1
+Here is heading 1.
+## Heading 2
+Here is Heading 2
+### Heading 3
+Here is Heading 3
+#### Heading 4
+Here is Heading 4
+##### Heading 5
+Here is Heading 5
+###### Heading 6
+Here is Heading 6
+
+- bullet
+- bullet
+
+- [x] Checklist
+- [ ] Checklist
+
+> quoted text
+> More quoted
+
+~~strikethrough~~
+
+* Bullet
+* Bullet
+
+```javascript
+let x = 1;
+// code block
+```
+
+Some `inline code` here.
+
+A [link](http://example.com).
+
+An image: ![Alt](img.jpg)
+</div>
+    
+<script src="./node_modules/ace-builds/src/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="./theme-yanta.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var editor = ace.edit('editor');
+    editor.setTheme('ace/theme/yanta');
+    editor.session.setMode('ace/mode/markdown');
+	editor.session.setTabSize(4);
+	document.getElementById('editor').style.fontSize='16px';
+
+    // Register Service Worker for PWA Functionality
+    async function regServWorker(swFilePath) {
+        if('serviceWorker' in navigator) {
+            await navigator.serviceWorker.register(swFilePath);
+            // console.log('Service Worker Registered');
+        }       
+    }
+    regServWorker('/sw.js');
+
+</script>
+</body>
+</html>
