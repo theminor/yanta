@@ -1,4 +1,4 @@
-let cacheName = 'yata';
+let cacheName = 'yanta';
 let filesToCache = [
   './',
   './index.html',
