@@ -1,7 +1,8 @@
 let cacheName = 'yata';
 let filesToCache = [
-  '/',
-  '/ace.html',
-  '/ace/mode-markdown.js',
-  '/ace/theme-yata.js'
+  './',
+  './index.html',
+  './node_modules/ace-builds/src/ace.js',
+  './node_modules/ace-builds/src/mode-markdown.js',
+  './theme-yanta.js'
 ];
