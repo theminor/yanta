@@ -9,7 +9,7 @@ self.addEventListener('install', e => {
 			  './node_modules/ace-builds/src/mode-markdown.js',
 			  './theme-yanta.js'
 			]);
-		});
+		})
 	);
 });
 
