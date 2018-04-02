@@ -1,6 +1,6 @@
-# yata
+# yanta
 
-Yet Another To-do App (yata) is a simple, git powered, encrypted, note-taking and task management app.
+Yet Another Note Taking App (yanta) is a simple, git powered, encrypted, note-taking and task management app.
 
 *Currently designing - I haven't started it yet.*
 
