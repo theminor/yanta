@@ -8,7 +8,7 @@
 	<link rel="stylesheet" href="yanta.css">
 </head>
 <body>
-<div id="buttonRow"><button id="saveBtn" onClick="saveBtn()">Save</button></div>
+<div id="buttonRow"><button id="saveBtn" onClick="saveBtn()">Save</button><button id="loadBtn" onClick="loadBtn()">Load</button></div>
 <div id="editor"></div>
     
 <script src="./ace/ace.js" type="text/javascript" charset="utf-8"></script>
@@ -63,12 +63,15 @@ editor.session.setTabSize(4);
 document.getElementById('editor').style.fontSize='16px';
 	
 if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js');
-editor.setValue(localStorage.getItem('editorText') || defaultText, -1);
-
 function saveBtn() {
 	localStorage.setItem('editorText', editor.getValue());
 	alert('saved'); // temporary for debugging
 }
+function loadBtn() {
+	editor.setValue(localStorage.getItem('editorText') || defaultText, -1);
+	alert('loaded'); // temporary for debugging
+}
+loadBtn();
 </script>
 </body>
 </html>
