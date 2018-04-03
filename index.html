@@ -63,7 +63,7 @@ var editor = ace.edit('editor');
 editor.setTheme('ace/theme/yanta');
 editor.session.setMode('ace/mode/markdown');
 editor.session.setTabSize(4);
-editor.setWrapBehavioursEnabled(true)
+editor.session.setUseWrapMode(true);
 document.getElementById('editor').style.fontSize='16px';
 	
 if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js');
