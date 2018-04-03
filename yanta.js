@@ -12,7 +12,8 @@ let srvSettings = {
 	key: fs.readFileSync('/path/to/key.pem'),
 	cert: fs.readFileSync('/path/to/cert.pem')
 };
-try { srvSettings = require('./srvSettings.json'); } catch(err) { console.log('Error parsing settings file: ' + err + '. Using default settings.'); }
+try { srvSettings = Object.assign(srvSettings, require('./srvSettings.json')); }
+catch(err) { console.log('Error parsing settings file: ' + err + '. Using default settings.'); }
 if (srvSettings.useHttps) http = require('https'); else http = require('http');
 
 async function sendStatic(file, res) {
@@ -24,25 +25,16 @@ async function sendStatic(file, res) {
     }
     catch (err) {
 		res.writeHead(404, 'Not Found');
-		res.write('404: File Not Found!');
+		res.write('404: File Not Found');
 	}
 	return res.end();
 }
 
-//white-listed static files allowed
-const staticFiles = [
-	'./yanta.css',
-	'node_modules/ace-builds/src/ace.js',
-	'node_modules/ace-builds/src/mode-markdown.js'
-];
-
 const srv = http.createServer((req, res) => {
-	if (req.url.path === '' || req.url.path.endsWith('/')) sendStatic('./index.html');
-	else {
-		for (let i = 0; i < staticFiles.length; i++) {
-			if (req.url.path === staticFiles[i]) sendStatic('./index.html');
-		}
-	}
+	let path = req.url.path;
+	if (path === '' || path.endsWith('/')) sendStatic('./index.html');
+	else if (path.includes('/ace/')) sendStatic('./node_modules/ace-builds/src/' + path.substring(path.lastIndexOf('/ace/') + 5));
+	else if (path.endsWith('.html') || path.endsWith('.js') || path.endsWith('.css') || path.endsWith('.json')) sendStatic('.' + path);
 });
 
 srv.listen(srvSettings.port);
