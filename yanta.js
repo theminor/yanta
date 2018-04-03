@@ -7,7 +7,7 @@ let http;
 // default settings:
 let srvSettings = {
 	port: 45464,
-	urlBase: '/yanta';
+	urlBase: '/yanta',
 	useHttps: false,
 	key: '/path/to/key.pem',
 	cert: '/path/to/cert.pem'
