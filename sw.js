@@ -5,8 +5,8 @@ self.addEventListener('install', e => {
 			  './',
 			  './index.html',
 			  './yanta.css',
-			  './node_modules/ace-builds/src/ace.js',
-			  './node_modules/ace-builds/src/mode-markdown.js',
+			  './ace/ace.js',
+			  './ace/mode-markdown.js',
 			  './theme-yanta.js'
 			]);
 		})
