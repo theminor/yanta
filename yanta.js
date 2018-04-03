@@ -1,7 +1,6 @@
 'use strict';
 const {promisify} = require('util');
 const fs = require('fs');
-const path = require('path');
 const readFileAsync = promisify(fs.readFile);
 let http;
 
@@ -22,17 +21,21 @@ if (srvSettings.useHttps) {
 
 const srv = http.createServer((req, res) => {
 	async function sendStatic(file) {
+		let contentType = 'text/html';
+		if (file.endsWith('.js')) contentType = 'text/javascript';
+		else if (file.endsWith('.css')) contentType = 'text/css';
+		else if (file.endsWith('.json')) contentType = 'application/json';
+		else if (file.endsWith('.png')) contentType = 'image/png';		
 		try {
 			const data = await readFileAsync(file, {encoding: 'utf8'});
 			res.statusCode = 200;
-			res.writeHead(200);
-			res.write(data);
+			res.writeHead(200, {'Content-Type': contentType });
+			response.end(data, 'utf-8');
 		}
 		catch (err) {
-			res.writeHead(404, 'Not Found');
-			res.write('404: File Not Found');
+			response.writeHead(500, 'Internal Server Error');
+			res.end('Error 505: Internal Server Error ' + err.code + '. ' + err);
 		}
-		return res.end();
 	}
 	if (req.url === '' || req.url.endsWith('/')) sendStatic('./index.html');
 	else if (req.url.includes('/ace/')) sendStatic('./node_modules/ace-builds/src/' + req.url.substring(req.url.lastIndexOf('/ace/') + 5));
