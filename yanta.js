@@ -30,10 +30,10 @@ const srv = http.createServer((req, res) => {
 			const data = await readFileAsync(file, {encoding: 'utf8'});
 			res.statusCode = 200;
 			res.writeHead(200, {'Content-Type': contentType });
-			response.end(data, 'utf-8');
+			res.end(data, 'utf-8');
 		}
 		catch (err) {
-			response.writeHead(500, 'Internal Server Error');
+			res.writeHead(500, 'Internal Server Error');
 			res.end('Error 505: Internal Server Error ' + err.code + '. ' + err);
 		}
 	}
