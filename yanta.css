@@ -1,6 +1,6 @@
 #editor { 
 	position: absolute;
-	top: 15px;
+	top: 20px;
 	right: 0px;
 	bottom: 0px;
 	left: 0px;
@@ -10,6 +10,6 @@
 	position: absolute;
 	top: 0px;
 	right: 0px;
-	bottom: 15px;
+	bottom: 20px;
 	left: 0px;
 }
