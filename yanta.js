@@ -34,6 +34,7 @@ const srv = http.createServer((req, res) => {
 	let path = req.url.path;
 	if (path === '' || path.endsWith('/')) sendStatic('./index.html');
 	else if (path.includes('/ace/')) sendStatic('./node_modules/ace-builds/src/' + path.substring(path.lastIndexOf('/ace/') + 5));
+	else if (path.includes('/icons/')) sendStatic('.' + path);
 	else if (path.endsWith('.html') || path.endsWith('.js') || path.endsWith('.css') || path.endsWith('.json')) sendStatic('.' + path);
 });
 
