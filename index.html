@@ -8,8 +8,14 @@
 	<link rel="stylesheet" href="yanta.css">
 </head>
 <body>
-
-<div id="editor">
+<div id="buttonRow"><button id="saveBtn" onClick="saveBtn()">Save</button></div>
+<div id="editor"></div>
+    
+<script src="./ace/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="./theme-yanta.js" type="text/javascript" charset="utf-8"></script>
+<script>
+let defaultText =
+`
 This is *markdown* and it **works** just fine.
 
 # Heading 1
@@ -39,35 +45,30 @@ Here is Heading 6
 * Bullet
 * Bullet
 
-```javascript
+\`\`\`javascript
 let x = 1;
 // code block
-```
+\`\`\`
 
-Some `inline code` here.
+Some \`inline code\` here.
 
 A [link](http://example.com).
 
 An image: ![Alt](img.jpg)
-</div>
-    
-<script src="./ace/ace.js" type="text/javascript" charset="utf-8"></script>
-<script src="./theme-yanta.js" type="text/javascript" charset="utf-8"></script>
-<script>
-    var editor = ace.edit('editor');
-    editor.setTheme('ace/theme/yanta');
-    editor.session.setMode('ace/mode/markdown');
-	editor.session.setTabSize(4);
-	document.getElementById('editor').style.fontSize='16px';
+`
+var editor = ace.edit('editor');
+editor.setTheme('ace/theme/yanta');
+editor.session.setMode('ace/mode/markdown');
+editor.session.setTabSize(4);
+document.getElementById('editor').style.fontSize='16px';
+	
+if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js');
+editor.setValue(localStorage.getItem('editorText') || defaultText, -1);
 
-    // Register Service Worker for PWA Functionality
-    async function regServWorker(swFilePath) {
-        if('serviceWorker' in navigator) {
-            await navigator.serviceWorker.register(swFilePath);
-            // console.log('Service Worker Registered');
-        }       
-    }
-    regServWorker('./sw.js');
+function saveBtn() {
+	localStorage.setItem('editorText', editor.getValue());
+	alert('saved'); // temporary for debugging
+}
 </script>
 </body>
 </html>
