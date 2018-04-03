@@ -7,7 +7,8 @@ let http;
 // default settings:
 let srvSettings = {
 	port: 45464,
-	useHttps: true,
+	urlBase: '/yanta';
+	useHttps: false,
 	key: '/path/to/key.pem',
 	cert: '/path/to/cert.pem'
 };
@@ -19,6 +20,7 @@ if (srvSettings.useHttps) {
 	srvSettings.cert = fs.readFileSync(srvSettings.cert);
 } else http = require('http');
 
+// server
 const srv = http.createServer((req, res) => {
 	async function sendStatic(file) {
 		let contentType = 'text/html';
@@ -40,10 +42,10 @@ const srv = http.createServer((req, res) => {
 			console.log('Response was: ' + JSON.stringify(res));
 		}
 	}
-	if (req.url === '' || req.url.endsWith('/')) sendStatic('./index.html');
-	else if (req.url.includes('/ace/')) sendStatic('./node_modules/ace-builds/src/' + req.url.substring(req.url.lastIndexOf('/ace/') + 5));
-	else if (req.url.includes('/icons/')) sendStatic('.' + req.url);
-	else if (req.url.endsWith('.html') || req.url.endsWith('.js') || req.url.endsWith('.css') || req.url.endsWith('.json')) sendStatic('.' + req.url);
+	let path = req.url.replace(srvSettings.urlBase, '');
+	if (path === '' || path === '/') sendStatic('./index.html');
+	else if (path.startsWith('/ace/')) sendStatic('./node_modules/ace-builds/src/' + path.replace('/ace/', '');
+	else if (path.startsWith('/icons/')) sendStatic('.' + path);
+	else if (path.endsWith('.html') || path.endsWith('.js') || path.endsWith('.css') || path.endsWith('.json')) sendStatic('.' + path);
 });
-
 srv.listen(srvSettings.port);
