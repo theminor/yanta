@@ -1,15 +1,25 @@
-#editor { 
-	position: absolute;
-	top: 20px;
-	right: 0px;
-	bottom: 0px;
-	left: 0px;
-}
 
 #buttonRow {
 	position: absolute;
 	top: 0px;
 	right: 0px;
-	bottom: 20px;
+	bottom: 15px;
 	left: 0px;
+	background-color: #F4F0E5;
+}
+
+#editor { 
+	position: absolute;
+	top: 16px;
+	right: 0px;
+	bottom: 0px;
+	left: 0px;
+}
+
+.buttonRowBtn {
+    float: right;
+    color: #F4F0E5;
+    font-size: 11px;
+    background-color: #062F4F;
+    border: none;
 }
