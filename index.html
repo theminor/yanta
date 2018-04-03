@@ -63,14 +63,8 @@ editor.session.setTabSize(4);
 document.getElementById('editor').style.fontSize='16px';
 	
 if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js');
-function saveBtn() {
-	localStorage.setItem('editorText', editor.getValue());
-	alert('saved'); // temporary for debugging
-}
-function loadBtn() {
-	editor.setValue(localStorage.getItem('editorText') || defaultText, -1);
-	alert('loaded'); // temporary for debugging
-}
+function saveBtn() { localStorage.setItem('editorText', editor.getValue()); }
+function loadBtn() { editor.setValue(localStorage.getItem('editorText') || defaultText, -1); }
 loadBtn();
 </script>
 </body>
