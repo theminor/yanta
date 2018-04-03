@@ -20,21 +20,20 @@ if (srvSettings.useHttps) {
 	srvSettings.cert = fs.readFileSync(srvSettings.cert);
 } else http = require('http');
 
-async function sendStatic(file, res) {
-    try {
-        const data = await readFileAsync(file, {encoding: 'utf8'});
-		res.statusCode = 200;
-		res.writeHead(200);
-		res.write(data);
-    }
-    catch (err) {
-		res.writeHead(404, 'Not Found');
-		res.write('404: File Not Found');
-	}
-	return res.end();
-}
-
 const srv = http.createServer((req, res) => {
+	async function sendStatic(file) {
+		try {
+			const data = await readFileAsync(file, {encoding: 'utf8'});
+			res.statusCode = 200;
+			res.writeHead(200);
+			res.write(data);
+		}
+		catch (err) {
+			res.writeHead(404, 'Not Found');
+			res.write('404: File Not Found');
+		}
+		return res.end();
+	}
 	if (req.url === '' || req.url.endsWith('/')) sendStatic('./index.html');
 	else if (req.url.includes('/ace/')) sendStatic('./node_modules/ace-builds/src/' + req.url.substring(req.url.lastIndexOf('/ace/') + 5));
 	else if (req.url.includes('/icons/')) sendStatic('.' + req.url);
