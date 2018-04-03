@@ -35,11 +35,10 @@ async function sendStatic(file, res) {
 }
 
 const srv = http.createServer((req, res) => {
-	let path = req.url.path;
-	if (path === '' || path.endsWith('/')) sendStatic('./index.html');
-	else if (path.includes('/ace/')) sendStatic('./node_modules/ace-builds/src/' + path.substring(path.lastIndexOf('/ace/') + 5));
-	else if (path.includes('/icons/')) sendStatic('.' + path);
-	else if (path.endsWith('.html') || path.endsWith('.js') || path.endsWith('.css') || path.endsWith('.json')) sendStatic('.' + path);
+	if (req.url === '' || req.url.endsWith('/')) sendStatic('./index.html');
+	else if (req.url.includes('/ace/')) sendStatic('./node_modules/ace-builds/src/' + req.url.substring(req.url.lastIndexOf('/ace/') + 5));
+	else if (req.url.includes('/icons/')) sendStatic('.' + req.url);
+	else if (req.url.endsWith('.html') || req.url.endsWith('.js') || req.url.endsWith('.css') || req.url.endsWith('.json')) sendStatic('.' + req.url);
 });
 
 srv.listen(srvSettings.port);
