@@ -35,7 +35,9 @@ const srv = http.createServer((req, res) => {
 		catch (err) {
 			res.writeHead(500, 'Internal Server Error');
 			res.end('Error: ' + err);
-			console.log('Error in sendStatic(): ' + err + ' -- Request: ' + JSON.stringify(req) + ' -- Response: ' + JSON.stringify(res));
+			console.log('Error in sendStatic(): ' + err);
+			console.log('Request was: ' + JSON.stringify(req));
+			console.log('Response was: ' + JSON.stringify(res));
 		}
 	}
 	if (req.url === '' || req.url.endsWith('/')) sendStatic('./index.html');
