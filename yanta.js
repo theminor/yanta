@@ -9,12 +9,16 @@ let http;
 let srvSettings = {
 	port: 45464,
 	useHttps: true,
-	key: fs.readFileSync('/path/to/key.pem'),
-	cert: fs.readFileSync('/path/to/cert.pem')
+	key: '/path/to/key.pem',
+	cert: '/path/to/cert.pem'
 };
 try { srvSettings = Object.assign(srvSettings, require('./srvSettings.json')); }
 catch(err) { console.log('Error parsing settings file: ' + err + '. Using default settings.'); }
-if (srvSettings.useHttps) http = require('https'); else http = require('http');
+if (srvSettings.useHttps) {
+	http = require('https'); 
+	srvSettings.key = fs.readFileSync(srvSettings.key);
+	srvSettings.cert = fs.readFileSync(srvSettings.cert);
+} else http = require('http');
 
 async function sendStatic(file, res) {
     try {
