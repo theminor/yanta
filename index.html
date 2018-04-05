@@ -16,7 +16,33 @@
     
 <script src="./ace/ace.js" type="text/javascript" charset="utf-8"></script>
 <script src="./theme-yanta.js" type="text/javascript" charset="utf-8"></script>
-<script src="./index.js" type="text/javascript" charset="utf-8"></script>
+<script>
+	function get(url) {
+		return new Promise((resolve, reject) => {
+			let rqst = new XMLHttpRequest();
+			rqst.onreadystatechange = () => {
+				if (rqst.readyState === XMLHttpRequest.DONE) {
+					if (rqst.status === 200) resolve(rqst.responseText); else reject(rqst.status);
+				}
+			}
+			rqst.ontimeout = () => reject('timeout');
+			rqst.open("GET", url, true);
+			rqst.send();
+		})
+ 	}
+
+	var editor = ace.edit('editor');
+	editor.setTheme('ace/theme/yanta');
+	editor.session.setMode('ace/mode/markdown');
+	editor.session.setTabSize(4);
+	editor.session.setUseWrapMode(true);
+	document.getElementById('editor').style.fontSize='16px';
+
+	if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js');
+	function saveBtn() { localStorage.setItem('editorText', editor.getValue()); }
+	async function loadBtn() { editor.setValue(localStorage.getItem('editorText') || await get('./default.txt'), -1); }
+	loadBtn();
+</script>
 
 </body>
 </html>
