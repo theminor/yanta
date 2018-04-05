@@ -1,4 +1,5 @@
 This is *markdown* and it **works** just fine.
+
 # Heading 1
 Here is heading 1.
 ## Heading 2
@@ -11,19 +12,27 @@ Here is Heading 4
 Here is Heading 5
 ###### Heading 6
 Here is Heading 6
+
 - bullet
 - bullet
+
 - [x] Checklist
 - [ ] Checklist
+
 > quoted text
 > More quoted
+
 ~~strikethrough~~
+
 * Bullet
 * Bullet
-\`\`\`javascript
+
+```javascript
 let x = 1;
 // code block
-\`\`\`
+```
+
 Some \`inline code\` here.
+
 A [link](http://example.com).
 An image: ![Alt](img.jpg)
