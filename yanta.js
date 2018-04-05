@@ -7,12 +7,13 @@ let cache = {};
 
 // default settings:
 let srvSettings = {
-	port: 45464,						// Server Port
-	urlBase: '/yanta',					// url base for hosting
-	useHttps: false,					// use https instead of http (requires cert and key)
-	key: '/path/to/key.pem',			// https key
-	cert: '/path/to/cert.pem',			// https certificate
-	storageDir: '/path/to/storage'		// directory to store notes in
+	port: 45464,								// Server Port
+	urlBase: '/yanta',							// url base for hosting
+	useHttps: false,							// use https instead of http (requires cert and key)
+	key: '/path/to/key.pem',					// https key
+	cert: '/path/to/cert.pem',					// https certificate
+	storageDir: '/path/to/storage',				// directory to store notes in
+	oauthFile: '/oauth/credentials.json'		// Oauth2 credentials file, for example from https://developers.google.com/identity/sign-in/web/
 };
 try { srvSettings = Object.assign(srvSettings, require('./srvSettings.json')); }
 catch(err) { console.log('Error parsing settings file: ' + err + '. Using default settings.'); }
