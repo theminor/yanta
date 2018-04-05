@@ -31,6 +31,7 @@ const srv = http.createServer((req, res) => {
 		else if (file.endsWith('.css')) contentType = 'text/css';
 		else if (file.endsWith('.json')) contentType = 'application/json';
 		else if (file.endsWith('.png')) contentType = 'image/png';
+		else if (file.endsWith('.txt')) contentType = 'text/plain';
 		if (!cache[file]) {
 			try { cache[file] = await readFileAsync(file, {encoding: 'utf8'}); }
 			catch (err) {
@@ -50,6 +51,6 @@ const srv = http.createServer((req, res) => {
 	if (path === '' || path === '/') sendStatic('./index.html');
 	else if (path.startsWith('/ace/')) sendStatic('./node_modules/ace-builds/src/' + path.replace('/ace/', ''));
 	else if (path.startsWith('/icons/') || path.startsWith('/oauth/')) sendStatic('.' + path);
-	else if (path.endsWith('.html') || path.endsWith('.css') || path.endsWith('.json') || (path.endsWith('.js') && !path.endsWith('yanta.js')) ) sendStatic('.' + path);
+	else if (path.endsWith('.html') || path.endsWith('.css') || path.endsWith('.json') || path.endsWith('.txt') || (path.endsWith('.js') && !path.endsWith('yanta.js')) ) sendStatic('.' + path);
 });
 srv.listen(srvSettings.port);
