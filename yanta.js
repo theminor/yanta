@@ -49,6 +49,6 @@ const srv = http.createServer((req, res) => {
 	if (path === '' || path === '/') sendStatic('./index.html');
 	else if (path.startsWith('/ace/')) sendStatic('./node_modules/ace-builds/src/' + path.replace('/ace/', ''));
 	else if (path.startsWith('/icons/')) sendStatic('.' + path);
-	else if (path.endsWith('.html') || path.endsWith('.js') || path.endsWith('.css') || path.endsWith('.json')) sendStatic('.' + path);
+	else if (path.endsWith('.html') || path.endsWith('.css') || path.endsWith('.json') || (path.endsWith('.js') && !path.endsWith('yanta.js')) ) sendStatic('.' + path);
 });
 srv.listen(srvSettings.port);
