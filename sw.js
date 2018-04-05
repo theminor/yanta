@@ -2,12 +2,13 @@ self.addEventListener('install', e => {
 	e.waitUntil(
 		caches.open('yanta').then(cache => {
 			return cache.addAll([
-			  './',
-			  './index.html',
-			  './yanta.css',
-			  './ace/ace.js',
-			  './ace/mode-markdown.js',
-			  './theme-yanta.js'
+				'./',
+				'./index.html',
+				'./index.js',
+				'./index.css',
+				'./ace/ace.js',
+				'./ace/mode-markdown.js',
+				'./theme-yanta.js'
 			]);
 		})
 	);
