@@ -59,3 +59,7 @@ typings/
 
 # settings file
 srvSettings.json
+# oauth2 credentials & files
+credentials.json
+oauth/
+oauth2/
