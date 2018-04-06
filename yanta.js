@@ -55,7 +55,7 @@ const srv = http.createServer((req, res) => { 						// create simple server
 		if (usr === srvSettings.userName && pswd === srvSettings.password) {
 			// console.log(req.method + ' ' + req.url);
 			let path = req.url.replace(srvSettings.urlBase, '');			// basic routing
-			if (req.method === 'PUT' && startsWith('/docs/')) {
+			if (req.method === 'PUT' && path.startsWith('/docs/')) {
 				let dta = '';
 				req.on('error', err => console.error(err));
 				req.on('data', chunk => dta += chunk);
