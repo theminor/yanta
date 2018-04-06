@@ -11,7 +11,7 @@ self.addEventListener('install', e => {
 				'./theme-yanta.js'
 			];
 			return cache.addAll(urls.map(url => new Request(url, {credentials: 'same-origin'})));
-		});
+		})
 	);
 });
 
