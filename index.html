@@ -9,6 +9,7 @@
 </head>
 <body>
 <div id="buttonRow">
+	<input type="text" id="fileNameBox" onchange="fileNameChange()">filename.txt</input>
 	<button id="loadLocalBtn" class="buttonRowBtn" onClick="loadLocalBtn()">Load Local</button>
 	<button id="saveLocalBtn" class="buttonRowBtn" onClick="saveLocalBtn()">Save Local</button>
 	<button id="loadRemoteBtn" class="buttonRowBtn" onClick="loadRemoteBtn()">Load Remote</button>
@@ -38,9 +39,11 @@
 	editor.session.setMode('ace/mode/markdown');
 	editor.session.setTabSize(4);
 	editor.session.setUseWrapMode(true);
-	document.getElementById('editor').style.fontSize='16px';
+	document.getElementById('editor').style.fontSize='16px';	
+	document.getElementById('fileNameBox').value = document.cookie.match('(^|;)\\s*filename\\s*=\\s*([^;]+)');
 
 	if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js');
+	function fileNameChange() { document.cookie('filename=' + document.getElementById('fileNameBox').value + '; expires=Thu, 18 Dec 2013 12:00:00 UTC'); }
 	function saveLocalBtn() { localStorage.setItem('editorText', editor.getValue()); }
 	async function loadLocalBtn() { editor.setValue(localStorage.getItem('editorText') || await srvRqst('GET', './default.txt'), -1); }
 	async function saveRemoteBtn() { srvRqst('PUT', './save.txt', editor.getValue()); }		// // *** TO DO: multiple files and file names
