@@ -45,7 +45,7 @@
 	async function loadLocalBtn() { editor.setValue(localStorage.getItem('editorText') || await srvRqst('GET', './default.txt'), -1); }
 	async function saveRemoteBtn() { srvRqst('PUT', editor.getValue()); }		// // *** TO DO: multiple files and file names
 	async function loadRemoteBtn() { editor.setValue(await srvRqst('GET', './save.txt') || await srvRqst('GET', './default.txt'), -1); }
-	loadBtn();
+	// loadBtn();
 </script>
 
 </body>
