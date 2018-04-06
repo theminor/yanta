@@ -55,9 +55,9 @@ const srv = http.createServer((req, res) => { 						// create simple server
 			let path = req.url.replace(srvSettings.urlBase, '');			// basic routing
 			if (req.method === 'PUT') {
 				let dta = '';
-				req.on('error', err => console.error(err););
+				req.on('error', err => console.error(err));
 				req.on('data', chunk => dta += chunk;);
-				req.on('end', () => fs.writeFile('./save.txt', dta, err => console.error(err);));
+				req.on('end', () => fs.writeFile('./save.txt', dta, err => console.error(err)));
 			} else if (path === '' || path === '/') sendStatic('./index.html');
 			else if (path.endsWith('theme-yanta.js')) sendStatic('./theme-yanta.js');
 			else if (path.startsWith('/ace/')) sendStatic('./node_modules/ace-builds/src/' + path.replace('/ace/', ''));
