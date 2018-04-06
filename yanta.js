@@ -62,7 +62,7 @@ const srv = http.createServer((req, res) => { 						// create simple server
 			} else if (path === '' || path === '/') sendStatic('./index.html');
 			else if (path.endsWith('theme-yanta.js')) sendStatic('./theme-yanta.js');
 			else if (path.startsWith('/ace/')) sendStatic('./node_modules/ace-builds/src/' + path.replace('/ace/', ''));
-			else if (path.startsWith('/icons/') || path.startsWith('/oauth/')) sendStatic('.' + path);
+			else if (path.startsWith('/icons/') || path.startsWith('/docs/')) sendStatic('.' + path);
 			else if (path.endsWith('.html') || path.endsWith('.css') || (path.endsWith('.json') && !path.endsWith('srvSettings.json')) || path.endsWith('.txt') || (path.endsWith('.js') && !path.endsWith('yanta.js')) ) sendStatic('.' + path);			
 		} else {
 			res.statusCode = 403;
