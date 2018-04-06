@@ -9,15 +9,17 @@
 </head>
 <body>
 <div id="buttonRow">
-	<button id="loadBtn" class="buttonRowBtn" onClick="loadBtn()">Load</button>
-	<button id="saveBtn" class="buttonRowBtn" onClick="saveBtn()">Save</button>
+	<button id="loadLocalBtn" class="buttonRowBtn" onClick="loadLocalBtn()">Load Local</button>
+	<button id="saveLocalBtn" class="buttonRowBtn" onClick="saveLocalBtn()">Save Local</button>
+	<button id="loadRemoteBtn" class="buttonRowBtn" onClick="loadRemoteBtn()">Load Remote</button>
+	<button id="saveRemoteBtn" class="buttonRowBtn" onClick="saveRemoteBtn()">Save Remote</button>
 </div>
 <div id="editor"></div>
     
 <script src="./ace/ace.js" type="text/javascript" charset="utf-8"></script>
 <script src="./theme-yanta.js" type="text/javascript" charset="utf-8"></script>
 <script>
-	function get(url) {
+	function srvRqst(method, url, data) {
 		return new Promise((resolve, reject) => {
 			let rqst = new XMLHttpRequest();
 			rqst.onreadystatechange = () => {
@@ -26,11 +28,11 @@
 				}
 			}
 			rqst.ontimeout = () => reject('timeout');
-			rqst.open("GET", url, true);
-			rqst.send();
+			rqst.open(method, url, true);
+			rqst.send(data);
 		})
  	}
-
+	
 	var editor = ace.edit('editor');
 	editor.setTheme('ace/theme/yanta');
 	editor.session.setMode('ace/mode/markdown');
@@ -39,8 +41,10 @@
 	document.getElementById('editor').style.fontSize='16px';
 
 	if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js');
-	function saveBtn() { localStorage.setItem('editorText', editor.getValue()); }
-	async function loadBtn() { editor.setValue(localStorage.getItem('editorText') || await get('./default.txt'), -1); }
+	function saveLocalBtn() { localStorage.setItem('editorText', editor.getValue()); }
+	async function loadLocalBtn() { editor.setValue(localStorage.getItem('editorText') || await srvRqst('GET', './default.txt'), -1); }
+	async function saveRemoteBtn() { srvRqst('PUT', './save.txt'); }		// // *** TO DO: multiple files and file names
+	async function loadRemoteBtn() { editor.setValue(await srvRqst('GET', './save.txt') || await srvRqst('GET', './default.txt'), -1); }
 	loadBtn();
 </script>
 
