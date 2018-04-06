@@ -43,7 +43,7 @@
 	if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js');
 	function saveLocalBtn() { localStorage.setItem('editorText', editor.getValue()); }
 	async function loadLocalBtn() { editor.setValue(localStorage.getItem('editorText') || await srvRqst('GET', './default.txt'), -1); }
-	async function saveRemoteBtn() { srvRqst('PUT', editor.getValue()); }		// // *** TO DO: multiple files and file names
+	async function saveRemoteBtn() { srvRqst('PUT', './save.txt', editor.getValue()); }		// // *** TO DO: multiple files and file names
 	async function loadRemoteBtn() { editor.setValue(await srvRqst('GET', './save.txt') || await srvRqst('GET', './default.txt'), -1); }
 	// loadBtn();
 </script>
