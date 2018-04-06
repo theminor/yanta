@@ -56,7 +56,7 @@ const srv = http.createServer((req, res) => { 						// create simple server
 			if (req.method === 'PUT') {
 				let dta = '';
 				req.on('error', err => console.error(err));
-				req.on('data', chunk => dta += chunk;);
+				req.on('data', chunk => dta += chunk);
 				req.on('end', () => fs.writeFile('./save.txt', dta, err => console.error(err)));
 			} else if (path === '' || path === '/') sendStatic('./index.html');
 			else if (path.endsWith('theme-yanta.js')) sendStatic('./theme-yanta.js');
