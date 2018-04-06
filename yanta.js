@@ -53,7 +53,12 @@ const srv = http.createServer((req, res) => { 						// create simple server
 		let [usr, pswd] = (new Buffer(auth.replace('Basic ', ''), 'base64')).toString('utf8').split(':');		// remove 'Basic ', then convert to base 64, then split "username:password"
 		if (usr === srvSettings.userName && pswd === srvSettings.password) {
 			let path = req.url.replace(srvSettings.urlBase, '');			// basic routing
-			if (path === '' || path === '/') sendStatic('./index.html');
+			if (req.method === 'PUT') {
+				let dta = '';
+				req.on('error', err => console.error(err););
+				req.on('data', chunk => dta += chunk;);
+				req.on('end', () => fs.writeFile('./save.txt', dta, err => console.error(err);));
+			} else if (path === '' || path === '/') sendStatic('./index.html');
 			else if (path.endsWith('theme-yanta.js')) sendStatic('./theme-yanta.js');
 			else if (path.startsWith('/ace/')) sendStatic('./node_modules/ace-builds/src/' + path.replace('/ace/', ''));
 			else if (path.startsWith('/icons/') || path.startsWith('/oauth/')) sendStatic('.' + path);
