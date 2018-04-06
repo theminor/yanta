@@ -23,6 +23,7 @@ if (srvSettings.useHttps) {
 	srvSettings.key = fs.readFileSync(srvSettings.key);
 	srvSettings.cert = fs.readFileSync(srvSettings.cert);
 } else http = require('http');
+if (!fs.existsSync('./docs')) fs.mkdirSync('./docs');				// create docs directory if it doesn't exist
 
 const srv = http.createServer((req, res) => { 						// create simple server
 	async function sendStatic(file) {								// response function
@@ -54,11 +55,11 @@ const srv = http.createServer((req, res) => { 						// create simple server
 		if (usr === srvSettings.userName && pswd === srvSettings.password) {
 			// console.log(req.method + ' ' + req.url);
 			let path = req.url.replace(srvSettings.urlBase, '');			// basic routing
-			if (req.method === 'PUT') {
+			if (req.method === 'PUT' && startsWith('/docs/')) {
 				let dta = '';
 				req.on('error', err => console.error(err));
 				req.on('data', chunk => dta += chunk);
-				req.on('end', () => fs.writeFile('./save.txt', dta, err => console.error(err)));
+				req.on('end', () => fs.writeFile('./' + path, dta, err => console.error(err)));
 			} else if (path === '' || path === '/') sendStatic('./index.html');
 			else if (path.endsWith('theme-yanta.js')) sendStatic('./theme-yanta.js');
 			else if (path.startsWith('/ace/')) sendStatic('./node_modules/ace-builds/src/' + path.replace('/ace/', ''));
