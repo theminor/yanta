@@ -40,8 +40,8 @@
 	editor.session.setTabSize(4);
 	editor.session.setUseWrapMode(true);
 	document.getElementById('editor').style.fontSize='16px';	
-	document.getElementById('fileNameBox').value = document.cookie.match('(^|;)\\s*filename\\s*=\\s*([^;]+)');
-
+	//document.getElementById('fileNameBox').value = document.cookie.match('(^|;)\\s*filename\\s*=\\s*([^;]+)');
+	document.getElementById('fileNameBox').value = document.cookie.match('filename=([^;]*)')[1];	
 	if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js');
 	function fileNameChange() { document.cookie = 'filename=' + document.getElementById('fileNameBox').value + '; expires=Sat, 31 Dec 2050 00:00:01 GMT'; }
 	function saveLocalBtn() { localStorage.setItem('editorText', editor.getValue()); }
