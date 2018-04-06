@@ -7,6 +7,21 @@
 	background-color: #F4F0E5;
 }
 
+.buttonRowBtn {
+    float: right;
+    color: #F4F0E5;
+    font-size: 11px;
+    background-color: #062F4F;
+    border: none;
+}
+
+#fileNameBox {
+	position: absolute;
+	height: 6px;
+	font-size: 10px;
+	margin: 2px;
+}
+
 #editor { 
 	position: absolute;
 	top: 16px;
@@ -15,10 +30,4 @@
 	left: 0px;
 }
 
-.buttonRowBtn {
-    float: right;
-    color: #F4F0E5;
-    font-size: 11px;
-    background-color: #062F4F;
-    border: none;
-}
+
