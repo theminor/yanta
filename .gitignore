@@ -64,3 +64,4 @@ credentials.json
 oauth/
 oauth2/
 docs/
+!docs/default.txt
