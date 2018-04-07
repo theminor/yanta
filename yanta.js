@@ -58,6 +58,7 @@ const srv = http.createServer((req, res) => { 						// create simple server
 				req.on('error', err => console.error(err));
 				req.on('data', chunk => dta += chunk);
 				req.on('end', () => fs.writeFile('./' + path, dta, err => console.error(err)));
+				cache['./' + path] = null;
 			} else if (path === '' || path === '/') sendStatic('./index.html');
 			else if (path.endsWith('theme-yanta.js')) sendStatic('./theme-yanta.js');
 			else if (path.startsWith('/ace/')) sendStatic('./node_modules/ace-builds/src/' + path.replace('/ace/', ''));
