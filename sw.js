@@ -4,7 +4,6 @@ self.addEventListener('install', e => {
 			let urls = [
 				'./',
 				'./index.html',
-				'./index.js',
 				'./index.css',
 				'./ace/ace.js',
 				'./ace/mode-markdown.js',
