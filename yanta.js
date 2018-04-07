@@ -17,7 +17,7 @@ let srvSettings = {
 	password: 'secret'												// password for basic authentication
 };
 try { srvSettings = Object.assign(srvSettings, require('./srvSettings.json')); }	// load alternate settings from srvSettings.json, if it exists
-catch(err) { console.log('Error parsing settings file: ' + err + '. Using default settings.'); }
+catch(err) { console.warn('Error parsing settings file: ' + err + '. Using default settings.'); }
 if (srvSettings.useHttps) {
 	http = require('https'); 
 	srvSettings.key = fs.readFileSync(srvSettings.key);
@@ -27,21 +27,20 @@ if (!fs.existsSync('./docs')) fs.mkdirSync('./docs');				// create docs director
 
 const srv = http.createServer((req, res) => { 						// create simple server
 	async function sendStatic(file) {								// response function
-		let contentType = 'text/html';
+		let contentType = 'text/plain';
 		if (file.endsWith('.js')) contentType = 'text/javascript';
 		else if (file.endsWith('.css')) contentType = 'text/css';
 		else if (file.endsWith('.json')) contentType = 'application/json';
 		else if (file.endsWith('.png')) contentType = 'image/png';
-		else if (file.endsWith('.txt')) contentType = 'text/plain';
+		else if (file.endsWith('.html')) contentType = 'text/html';
 		if (!cache[file]) {
 			try { cache[file] = await readFileAsync(file, {encoding: 'utf8'}); }
 			catch (err) {
-				res.writeHead(500, 'Internal Server Error');
-				res.end('Error: ' + err);
-				console.log('Error in sendStatic(): ' + err);
-				console.log('Request was: ' + JSON.stringify(req));
-				console.log('Response was: ' + JSON.stringify(res));
-				return err;
+				cache[file] = null;
+				console.warn('Error in sendStatic(): ' + err);
+				res.statusCode = 200;
+				res.writeHead(404, 'Not Found');
+				return res.end('404 Not Found: ' + err);
 			}
 		}
 		res.statusCode = 200;
@@ -53,7 +52,6 @@ const srv = http.createServer((req, res) => { 						// create simple server
 	if (auth) {
 		let [usr, pswd] = (new Buffer(auth.replace('Basic ', ''), 'base64')).toString('utf8').split(':');		// remove 'Basic ', then convert to base 64, then split "username:password"
 		if (usr === srvSettings.userName && pswd === srvSettings.password) {
-			// console.log(req.method + ' ' + req.url);
 			let path = req.url.replace(srvSettings.urlBase, '');			// basic routing
 			if (req.method === 'PUT' && path.startsWith('/docs/')) {
 				let dta = '';
@@ -66,8 +64,10 @@ const srv = http.createServer((req, res) => { 						// create simple server
 			else if (path.startsWith('/icons/') || path.startsWith('/docs/')) sendStatic('.' + path);
 			else if (path.endsWith('.html') || path.endsWith('.css') || (path.endsWith('.json') && !path.endsWith('srvSettings.json')) || path.endsWith('.txt') || (path.endsWith('.js') && !path.endsWith('yanta.js')) ) sendStatic('.' + path);			
 		} else {
+			console.warn('Failed Login at ' + new Date().toLocaleString() + ' from ip ' + (req.header('x-forwarded-for') || req.connection.remoteAddress));
 			res.statusCode = 403;
-			return res.end('Login Failed');
+			res.writeHead(403, 'Login Failed');
+			return res.end('403 Login Failed');
 		}
 	} else {														// authentication is needed
 		res.statusCode = 401;
