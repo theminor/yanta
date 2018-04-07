@@ -7,7 +7,8 @@ self.addEventListener('install', e => {
 				'./index.css',
 				'./ace/ace.js',
 				'./ace/mode-markdown.js',
-				'./theme-yanta.js'
+				'./theme-yanta.js',
+				'./icons/yata-192.png'
 			];
 			return cache.addAll(urls.map(url => new Request(url, {credentials: 'same-origin'})));
 		})
