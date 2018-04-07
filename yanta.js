@@ -59,7 +59,7 @@ const srv = http.createServer((req, res) => { 						// create simple server
 				let dta = '';
 				req.on('error', err => console.error(err));
 				req.on('data', chunk => dta += chunk);
-				return req.on('end', () => fs.writeFile(path, dta, err => console.error('error writing file to ' + path + ': ' + err + '; data was: ' + dta)));
+				return req.on('end', () => fs.writeFile(path, dta, err => if (err) console.error('error writing file to ' + path + ': ' + err)));
 			}
 			if (path === '' || path === '/') return sendStatic('./index.html');
 			if (path.endsWith('theme-yanta.js')) return sendStatic('./theme-yanta.js');
