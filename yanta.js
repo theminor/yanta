@@ -23,7 +23,6 @@ if (srvSettings.useHttps) {
 	srvSettings.key = fs.readFileSync(srvSettings.key);
 	srvSettings.cert = fs.readFileSync(srvSettings.cert);
 } else http = require('http');
-if (!fs.existsSync('./docs')) fs.mkdirSync('./docs');				// create docs directory if it doesn't exist
 
 const srv = http.createServer((req, res) => { 						// create simple server
 	async function sendStatic(file) {								// response function
