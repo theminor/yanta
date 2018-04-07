@@ -61,7 +61,5 @@ typings/
 srvSettings.json
 # oauth2 credentials & files
 credentials.json
-oauth/
-oauth2/
 docs/
 !docs/default.txt
