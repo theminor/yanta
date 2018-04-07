@@ -10,13 +10,10 @@
 <body>
 <div id="buttonRow">
 	<input type="text" id="fileNameBox" oninput="fileNameChange()"></input>
-	<button id="loadLocalBtn" class="buttonRowBtn" onClick="loadLocalBtn()">Load Local</button>
-	<button id="saveLocalBtn" class="buttonRowBtn" onClick="saveLocalBtn()">Save Local</button>
-	<button id="loadRemoteBtn" class="buttonRowBtn" onClick="loadRemoteBtn()">Load Remote</button>
-	<button id="saveRemoteBtn" class="buttonRowBtn" onClick="saveRemoteBtn()">Save Remote</button>
+	<button id="loadRemoteBtn" class="buttonRowBtn" onClick="loadRemoteBtn()">Load</button>
+	<button id="saveRemoteBtn" class="buttonRowBtn" onClick="saveRemoteBtn()">Save</button>
 </div>
 <div id="editor"></div>
-    
 <script src="./ace/ace.js" type="text/javascript" charset="utf-8"></script>
 <script src="./theme-yanta.js" type="text/javascript" charset="utf-8"></script>
 <script>
@@ -34,22 +31,19 @@
 		})
  	}
 	
-	var editor = ace.edit('editor');
+	let editor = ace.edit('editor');
 	editor.setTheme('ace/theme/yanta');
 	editor.session.setMode('ace/mode/markdown');
 	editor.session.setTabSize(4);
 	editor.session.setUseWrapMode(true);
-	document.getElementById('editor').style.fontSize='16px';	
-	//document.getElementById('fileNameBox').value = document.cookie.match('(^|;)\\s*filename\\s*=\\s*([^;]+)');
-	document.getElementById('fileNameBox').value = document.cookie.match('filename=([^;]*)')[1];	
+	document.getElementById('editor').style.fontSize='16px';
+	
+	let fNameBox = document.getElementById('fileNameBox');
+	fNameBox.value = document.cookie.includes('filename=') ? document.cookie.match(/filename=([^;]*)/)[1] : 'default.txt';
+	function fileNameChange() { document.cookie = 'filename=' + fNameBox.value + '; expires=Sat, 31 Dec 2050 00:00:01 GMT'; }
+	function saveRemoteBtn() { srvRqst('PUT', './docs/' + fNameBox.value, editor.getValue()); }
+	async function loadRemoteBtn() { editor.setValue(await srvRqst('GET', './docs/' + fNameBox.value), -1); }
 	if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js');
-	function fileNameChange() { document.cookie = 'filename=' + document.getElementById('fileNameBox').value + '; expires=Sat, 31 Dec 2050 00:00:01 GMT'; }
-	function saveLocalBtn() { localStorage.setItem('editorText', editor.getValue()); }
-	async function loadLocalBtn() { editor.setValue(localStorage.getItem('editorText') || await srvRqst('GET', './default.txt'), -1); }
-	async function saveRemoteBtn() { srvRqst('PUT', './docs/' + document.getElementById('fileNameBox').value, editor.getValue()); }		// // *** TO DO: multiple files and file names
-	async function loadRemoteBtn() { editor.setValue(await srvRqst('GET', './docs/' + document.getElementById('fileNameBox').value) || await srvRqst('GET', './default.txt'), -1); }
-	// loadBtn();
 </script>
-
 </body>
 </html>
