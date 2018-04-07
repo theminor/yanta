@@ -54,16 +54,19 @@ const srv = http.createServer((req, res) => { 						// create simple server
 		if (usr === srvSettings.userName && pswd === srvSettings.password) {
 			let path = req.url.replace(srvSettings.urlBase, '');			// basic routing
 			if (req.method === 'PUT' && path.startsWith('/docs/')) {
+				path = '.' + path;
+				console.log('clear cache: ' + path)
+				cache[path] = null;
 				let dta = '';
 				req.on('error', err => console.error(err));
 				req.on('data', chunk => dta += chunk);
-				req.on('end', () => fs.writeFile('./' + path, dta, err => console.error(err)));
-				cache['./' + path] = null;
-			} else if (path === '' || path === '/') sendStatic('./index.html');
-			else if (path.endsWith('theme-yanta.js')) sendStatic('./theme-yanta.js');
-			else if (path.startsWith('/ace/')) sendStatic('./node_modules/ace-builds/src/' + path.replace('/ace/', ''));
-			else if (path.startsWith('/icons/') || path.startsWith('/docs/')) sendStatic('.' + path);
-			else if (path.endsWith('.html') || path.endsWith('.css') || (path.endsWith('.json') && !path.endsWith('srvSettings.json')) || path.endsWith('.txt') || (path.endsWith('.js') && !path.endsWith('yanta.js')) ) sendStatic('.' + path);			
+				return req.on('end', () => fs.writeFile(path, dta, err => console.error('error writeing file to ' + path + ': ' + err)));
+			}
+			if (path === '' || path === '/') return sendStatic('./index.html');
+			if (path.endsWith('theme-yanta.js')) return sendStatic('./theme-yanta.js');
+			if (path.startsWith('/ace/')) return sendStatic('./node_modules/ace-builds/src/' + path.replace('/ace/', ''));
+			if (path.startsWith('/icons/') || path.startsWith('/docs/')) return sendStatic('.' + path);
+			if (path.endsWith('.html') || path.endsWith('.css') || (path.endsWith('.json') && !path.endsWith('srvSettings.json')) || path.endsWith('.txt') || (path.endsWith('.js') && !path.endsWith('yanta.js')) ) return sendStatic('.' + path);			
 		} else {
 			console.warn('Failed Login at ' + new Date().toLocaleString() + ' from ip ' + (req.header('x-forwarded-for') || req.connection.remoteAddress));
 			res.statusCode = 403;
