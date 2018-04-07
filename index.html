@@ -42,7 +42,7 @@
 	fNameBox.value = document.cookie.includes('filename=') ? document.cookie.match(/filename=([^;]*)/)[1] : 'default.txt';
 	function fileNameChange() { document.cookie = 'filename=' + fNameBox.value + '; expires=Sat, 31 Dec 2050 00:00:01 GMT'; }
 	function saveRemoteBtn() { srvRqst('PUT', './docs/' + fNameBox.value, editor.getValue()); }
-	async function loadRemoteBtn() { editor.setValue(await srvRqst('GET', './docs/' + fNameBox.value), -1); }
+	async function loadRemoteBtn() { try { editor.setValue(await srvRqst('GET', './docs/' + fNameBox.value), -1); } catch { alert('Could not load ' + fNameBox.value); } }
 	if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js');
 </script>
 </body>
