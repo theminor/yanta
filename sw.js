@@ -26,8 +26,10 @@ self.addEventListener('fetch', event => {
 		try { response = await fetch(event.request); }
 		catch(e) { console.warn('failed to fetch ' + event.request.url); }
 		finally {
-			if (response && response.ok) return cache.put(event.request, response);
-			else return caches.match(event.request);
+			if (response && response.ok) {
+				cache.put(event.request, response);
+				return response;
+			} else return caches.match(event.request);
 		}
 	});
 });
