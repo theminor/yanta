@@ -32,7 +32,7 @@ self.addEventListener('fetch', event => {
 // network, then cache, if timeout
 self.addEventListener('fetch', event => {
 	event.respondWith(
-		fetch(event.request).then((response) => {
+		return fetch(event.request).then((response) => {
 			if (response.ok) { return cache.put(event.request, response); }
 			else { return caches.match(event.request); }
 		}).catch(() => { 
