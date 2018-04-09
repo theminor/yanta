@@ -49,7 +49,7 @@
 	(async () => { await loadDoc('./docs/' + fNameBox.value) || await loadDoc('./docs/default.txt'); })()
 	
 	let changeTimer = window.setTimeout(null, 1);	// set to arbitrary timer ID
-	Editor.on("change", async function(e) {
+	editor.on("change", async function(e) {
 		window.clearTimeout(changeTimer);
 		changeTimer = window.setTimeout(saveRemoteBtn, 10000);	// save 10 seconds after any changes
 	})
