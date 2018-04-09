@@ -66,7 +66,7 @@ const srv = http.createServer((req, res) => { 						// create simple server
 			if (path.startsWith('/icons/') || path.startsWith('/docs/')) return sendStatic('.' + path);
 			if (path.endsWith('.html') || path.endsWith('.css') || (path.endsWith('.json') && !path.endsWith('srvSettings.json')) || path.endsWith('.txt') || (path.endsWith('.js') && !path.endsWith('yanta.js')) ) return sendStatic('.' + path);			
 		} else {
-			console.warn('Failed Login at ' + new Date().toLocaleString() + ' from ip ' + (req.header('x-forwarded-for') || req.connection.remoteAddress));
+			console.warn('Failed Login at ' + new Date().toLocaleString() + ' from ip ' + (req.header['x-forwarded-for'] || req.connection.remoteAddress));
 			res.statusCode = 403;
 			res.writeHead(403, 'Login Failed');
 			return res.end('403 Login Failed');
