@@ -31,7 +31,7 @@ const fromNetwork = (request, timeout) => new Promise((resolve, reject) => {
 	}, reject);
 });
 const fromCache = request => caches.open(CacheName).then(
-	cache => cache.match(request).then(matching => matching || Promise.reject('no-match'));
+	cache => cache.match(request).then(matching => matching || Promise.reject('no-match'););
 );
 self.addEventListener('fetch', event => {
 	event.respondWith(fromNetwork(event.request, 3000).catch(() => fromCache(event.request); ));
