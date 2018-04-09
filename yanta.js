@@ -24,8 +24,14 @@ if (srvSettings.useHttps) {
 	srvSettings.cert = fs.readFileSync(srvSettings.cert);
 } else http = require('http');
 
-const srv = http.createServer((req, res) => { 						// create simple server
-	async function sendStatic(file) {								// response function
+const srv = http.createServer((req, res) => {
+	function sendError(errCode, msg, err) {
+		console.warn('yanta error - sending error code ' + errCode + ': ' + msg + '. ' + err);
+		res.statusCode = errCode;
+		res.writeHead(errCode, msg);
+		return res.end(errCode + ' ' + msg);
+	}
+	async function sendStatic(file) {
 		let contentType = 'text/plain';
 		if (file.endsWith('.js')) contentType = 'text/javascript';
 		else if (file.endsWith('.css')) contentType = 'text/css';
@@ -36,42 +42,39 @@ const srv = http.createServer((req, res) => { 						// create simple server
 			try { cache[file] = await readFileAsync(file, {encoding: 'utf8'}); }
 			catch (err) {
 				cache[file] = null;
-				console.warn('Error in sendStatic(): ' + err);
-				res.statusCode = 200;
-				res.writeHead(404, 'Not Found');
-				return res.end('404 Not Found: ' + err);
+				return sendError(404, 'Not Found: ' + file, err);
 			}
 		}
 		res.statusCode = 200;
-		res.writeHead(200, {'Content-Type': contentType });
+		res.writeHead(200, {'Content-Type': contentType});
 		res.end(cache[file], 'utf-8');
 	}
 	
-	var auth = req.headers['authorization'];
+	let auth = req.headers['authorization'];
 	if (auth) {
 		let [usr, pswd] = (new Buffer(auth.replace('Basic ', ''), 'base64')).toString('utf8').split(':');		// remove 'Basic ', then convert to base 64, then split "username:password"
 		if (usr === srvSettings.userName && pswd === srvSettings.password) {
-			let path = req.url.replace(srvSettings.urlBase, '');			// basic routing
+			let path = req.url.replace(srvSettings.urlBase, '');
 			if (req.method === 'PUT' && path.startsWith('/docs/')) {
 				path = '.' + path;
 				cache[path] = null;
 				let dta = '';
 				req.on('error', err => console.error(err));
 				req.on('data', chunk => dta += chunk);
-				return req.on('end', () => fs.writeFile(path, dta, (err) => { if (err) console.error('error writing file to ' + path + ': ' + err); }));
+				req.on('end', () => {
+					fs.writeFile(path, dta, (err) => {
+						if (err) return sendError(507, 'Error writing file: ' + path, err);
+						else return sendStatic(path);
+					});
+				});
 			}
 			if (path === '' || path === '/') return sendStatic('./index.html');
 			if (path.endsWith('theme-yanta.js')) return sendStatic('./theme-yanta.js');
 			if (path.startsWith('/ace/')) return sendStatic('./node_modules/ace-builds/src/' + path.replace('/ace/', ''));
 			if (path.startsWith('/icons/') || path.startsWith('/docs/')) return sendStatic('.' + path);
 			if (path.endsWith('.html') || path.endsWith('.css') || (path.endsWith('.json') && !path.endsWith('srvSettings.json')) || path.endsWith('.txt') || (path.endsWith('.js') && !path.endsWith('yanta.js')) ) return sendStatic('.' + path);			
-		} else {
-			console.warn('Failed Login at ' + new Date().toLocaleString() + ' from ip ' + (req.headers['x-forwarded-for'] || req.connection.remoteAddress));
-			res.statusCode = 403;
-			res.writeHead(403, 'Login Failed');
-			return res.end('403 Login Failed');
-		}
-	} else {														// authentication is needed
+		} else return sendError(403, 'Login Failed', 'Failed Login at ' + new Date().toLocaleString() + ' from ip ' + (req.headers['x-forwarded-for'] || req.connection.remoteAddress));
+	} else {			// authentication is needed
 		res.statusCode = 401;
 		res.setHeader('WWW-Authenticate', 'Basic realm="yanta"');
 		return res.end('Login Required');
