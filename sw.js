@@ -36,6 +36,6 @@ self.addEventListener('fetch', event => {
 			console.warn('Error in fetch ' + event.request.url);
 			return await caches.match(event.request);
 		}
-	});
+	}());
 });
 
