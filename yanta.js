@@ -67,12 +67,11 @@ const srv = http.createServer((req, res) => {
 						else return sendStatic(path);
 					});
 				});
-			}
-			if (path === '' || path === '/') return sendStatic('./index.html');
-			if (path.endsWith('theme-yanta.js')) return sendStatic('./theme-yanta.js');
-			if (path.startsWith('/ace/')) return sendStatic('./node_modules/ace-builds/src/' + path.replace('/ace/', ''));
-			if (path.startsWith('/icons/') || path.startsWith('/docs/')) return sendStatic('.' + path);
-			if (path.endsWith('.html') || path.endsWith('.css') || (path.endsWith('.json') && !path.endsWith('srvSettings.json')) || path.endsWith('.txt') || (path.endsWith('.js') && !path.endsWith('yanta.js')) ) return sendStatic('.' + path);			
+			} else if (path === '' || path === '/') return sendStatic('./index.html');
+			else if (path.endsWith('theme-yanta.js')) return sendStatic('./theme-yanta.js');
+			else if (path.startsWith('/ace/')) return sendStatic('./node_modules/ace-builds/src/' + path.replace('/ace/', ''));
+			else if (path.startsWith('/icons/') || path.startsWith('/docs/')) return sendStatic('.' + path);
+			else if (path.endsWith('.html') || path.endsWith('.css') || (path.endsWith('.json') && !path.endsWith('srvSettings.json')) || path.endsWith('.txt') || (path.endsWith('.js') && !path.endsWith('yanta.js')) ) return sendStatic('.' + path);			
 		} else return sendError(403, 'Login Failed', 'Failed Login at ' + new Date().toLocaleString() + ' from ip ' + (req.headers['x-forwarded-for'] || req.connection.remoteAddress));
 	} else {			// authentication is needed
 		res.statusCode = 401;
