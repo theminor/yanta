@@ -22,62 +22,20 @@ self.addEventListener('activate', event => {
 // try to fetch on remote first, then use cache if that times out
 self.addEventListener('fetch', event => {
 	event.respondWith(async () => {
-		let response;
-		try { response = await fetch(event.request); }
-		catch(e) { console.warn('failed to fetch ' + event.request.url); }
-		finally {
+		try {
+			let response = await fetch(event.request);
 			if (response && response.ok) {
 				cache.put(event.request, response);
 				return response;
-			} else return caches.match(event.request);
+			} else {
+				console.warn('failed to fetch ' + event.request.url); 
+				return await caches.match(event.request);
+			}
+		}
+		catch(e) {
+			console.warn('Error in fetch ' + event.request.url);
+			return await caches.match(event.request);
 		}
 	});
 });
 
-
-/*
-self.addEventListener('fetch', event => {
-	event.respondWith(
-		caches.match(event.request, {ignoreSearch:true}).then(response => {
-			return response || fetch(event.request);
-		})
-	);
-});
-*/
-
-/*
-// network, then cache, if timeout
-self.addEventListener('fetch', event => {
-	event.respondWith(
-		return fetch(event.request).then((response) => {
-			if (response.ok) { return cache.put(event.request, response); }
-			else { return caches.match(event.request); }
-		}).catch(() => { 
-			return caches.match(event.request);
-		})
-	);
-});
-*/
-
-/*
-// network, then cache, if timeout
-self.addEventListener('fetch', event => {
-	event.respondWith(
-		caches.match(event.request, {ignoreSearch:true}).then((response) => {
-
-			fetch(event.request).then((response) => {
-				if (response.ok) { return cache.put(event.request, response); }
-				else { return caches.match(event.request); }
-			}).catch(() => { 
-				return caches.match(event.request);
-			})
-			
-			
-		})
-		
-		
-		
-
-	);
-});
-*/
