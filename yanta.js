@@ -49,6 +49,12 @@ const srv = http.createServer((req, res) => {
 		res.writeHead(200, {'Content-Type': contentType});
 		res.end(cache[file], 'utf-8');
 	}
+	function sendLogin() {
+		res.statusCode = 401;
+		res.setHeader('WWW-Authenticate', 'Basic realm="yanta"');
+		return res.end('Login Required');
+		// sendError(403, 'Login Failed', 'Failed Login at ' + new Date().toLocaleString() + ' from ip ' + (req.headers['x-forwarded-for'] || req.connection.remoteAddress));
+	}
 	
 	let auth = req.headers['authorization'];
 	if (auth) {
@@ -72,11 +78,7 @@ const srv = http.createServer((req, res) => {
 			else if (path.startsWith('/ace/')) return sendStatic('./node_modules/ace-builds/src/' + path.replace('/ace/', ''));
 			else if (path.startsWith('/icons/') || path.startsWith('/docs/')) return sendStatic('.' + path);
 			else if (path.endsWith('.html') || path.endsWith('.css') || (path.endsWith('.json') && !path.endsWith('srvSettings.json')) || path.endsWith('.txt') || (path.endsWith('.js') && !path.endsWith('yanta.js')) ) return sendStatic('.' + path);			
-		} else return sendError(403, 'Login Failed', 'Failed Login at ' + new Date().toLocaleString() + ' from ip ' + (req.headers['x-forwarded-for'] || req.connection.remoteAddress));
-	} else {			// authentication is needed
-		res.statusCode = 401;
-		res.setHeader('WWW-Authenticate', 'Basic realm="yanta"');
-		return res.end('Login Required');
-	}
+		} else return setTimeout(sendLogin, 3000);		// Repeated login attempt - delay by 3 seconds for security
+	} else sendLogin(); 								// Initial authentication is needed
 });
 srv.listen(srvSettings.port);
